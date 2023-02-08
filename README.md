@@ -14,8 +14,11 @@ todo!
 
 ## Team: 
 Daan @Daanvdplas
+
 Alex @AlexD10S
+
 Shankar @mshankarrao
+
 Felix @f-gate
 
 
