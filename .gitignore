@@ -1,4 +1,4 @@
-VoteMobile/yarn.lock
-VoteMobile/package.lock
-VoteMobile/node_modules
+VoteMobileFe/yarn.lock
+VoteMobileFe/package-lock.json
+VoteMobileFe/node_modules
 vote-mobile-api/Cargo.lock
