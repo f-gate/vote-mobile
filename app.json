@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "vote-mobile",
+    "slug": "vote-mobile",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "vote-mobile"
+}
