@@ -1,7 +1,8 @@
 import React from 'react';
 import { ApiPromise, WsProvider } from '@polkadot/api'
+import * as types from '@polkadot/types';
 import * as config from '../config/config';
-import { Referendum } from '../types/referendum';
+import { Finished, OnGoing, ReferendumOnGoing, ReferendumFinished , Referendums} from '../types/referendum';
 
 
 ///
@@ -18,13 +19,20 @@ const getChain = async (api: ApiPromise): Promise<string> => {
   return chain.toHuman();
 }
 
-const getReferenda = async (api: ApiPromise): Promise<Referendum[]> => {
-  const referendums: Referendum[] = [];
+const getReferenda = async (api: ApiPromise): Promise<Referendums> => {
+  const referendumsOnGoing: ReferendumOnGoing[] = [];
+  const referendumsFinished: ReferendumFinished[] = [];
   const allEntries = await api.query.democracy.referendumInfoOf.entries();
   allEntries.forEach(([{ args: [id] }, referendum]) => {
-        referendums.push({id: id.toHuman(), info: JSON.stringify(referendum.toHuman())} as Referendum)
+    const object = JSON.parse(referendum.toString());
+    if (object.finished){
+      referendumsFinished.push({id: id.toNumber(), info: object.finished as Finished});
+    }
+    if(object.ongoing){
+      referendumsOnGoing.push({id: id.toNumber(), info: object.ongoing as OnGoing});
+    }
   });
-  return referendums;
+  return {referendumsOnGoing, referendumsFinished};
 }
 
 export {connect, getChain, getReferenda}

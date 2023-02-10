@@ -1,16 +1,28 @@
+import "@polkadot/api-augment";
 import React,  { useEffect, useState }  from 'react';
-import { StyleSheet} from 'react-native';
-import { NativeBaseProvider, ScrollView, Center, Heading, VStack } from "native-base";
+import { NativeBaseProvider } from "native-base";
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
 import { connect, getChain, getReferenda } from './substrate-lib'
 import colors from './config/colors';
-import { Referendum } from './types/referendum';
+import ReferendaOnGoing from './components/ReferendaOngoing';
+import ReferendaFinished from './components/ReferendaFinished';
+import Header from './components/Header';
+import OnGoingReferendum from './pages/OnGoingReferendum';
+import HistoryReferendum from './pages/HistoryReferendum';
 
 export default function App() {
   //const { api } = useSubstrate();
   // console.log(api);
   const [chain, setChain] = useState("");
-  const [referendumComponent, setReferendumsComponent] = useState<JSX.Element[]>([]);
+  const [referendumOnGoingComponent, setReferendumsOngoingComponent] = useState<JSX.Element[]>([]);
+  const [referendumFinishedComponent, setReferendumsFinishedComponent] = useState<JSX.Element[]>([]);
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'firstTab', title: 'Referendums' },
+    { key: 'secondTab', title: 'History' },
+  ]);
+
 
   useEffect(() => {
     const getVotes = async () => {
@@ -18,37 +30,42 @@ export default function App() {
       const chain = await getChain(api);
       setChain(chain);
       const referendums = await getReferenda(api);
-      const referendumsComponent = referendums.map((referenda) =>
-        <Center py="4" bg={colors.white}>
-            {referenda.info}
-        </Center>
+      const referendumOnGoingComponent = referendums.referendumsOnGoing.map((referenda) =>
+        <ReferendaOnGoing referendum={referenda}/>
       );
-      setReferendumsComponent(referendumsComponent);
+      setReferendumsOngoingComponent(referendumOnGoingComponent);
+      const referendumFinishedComponent = referendums.referendumsFinished.map((referenda) =>
+        <ReferendaFinished referendum={referenda}/>
+      );
+      setReferendumsFinishedComponent(referendumFinishedComponent);
     }
     getVotes()
       // make sure to catch any error
       .catch(console.error);
   }, [])
 
+  const renderTabBar = (props: any) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: colors.primary }}
+      style={{ backgroundColor: colors.primary }}
+    />
+  );
+
+
   return (
     <NativeBaseProvider>
-      <Center mt="3" mb="4" style={styles.container}>
-        <Heading fontSize="xl">Connected to {chain}</Heading>
-      </Center>
-      <ScrollView h="80">
-      <VStack flex="1">
-        {referendumComponent}
-      </VStack>
-      </ScrollView>
+      <Header chain={chain} />
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={SceneMap({
+          firstTab: () => <OnGoingReferendum referendumComponent={referendumOnGoingComponent} />,
+          secondTab: () => <HistoryReferendum referendumComponent={referendumFinishedComponent} />,
+        })}
+        onIndexChange={setIndex}
+        tabBarPosition={'bottom'}
+        renderTabBar={renderTabBar}
+      />
     </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

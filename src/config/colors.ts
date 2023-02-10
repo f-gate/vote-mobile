@@ -5,7 +5,8 @@ const colors = {
     cyan: '#00B2FF',
     black: '#000000',
     lime: '#D3FF33',
-    green: '#56F39A'
+    green: '#56F39A',
+    red: '#FF0000'
   };
   
   export default colors;
