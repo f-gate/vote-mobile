@@ -30,7 +30,7 @@ export default function ReferendaOngoing(props: ReferendaProps) {
           }} _dark={{
             color: "violet.400"
           }} fontWeight="500" ml="-0.5" mt="-1">
-              The Silicon Valley of India.
+              {props.referendum.info.proposal.lookup.hash}
             </Text>
           </Stack>
             <Stack alignItems="center">
@@ -45,15 +45,6 @@ export default function ReferendaOngoing(props: ReferendaProps) {
             </Text>
             <Text fontWeight="400">
               Nay: {props.referendum.info.tally.nays}
-            </Text>
-            <Heading size="xs" ml="-1">
-              Proposal
-            </Heading>
-            <Text fontWeight="400">
-              Hash: {props.referendum.info.proposal.lookup.hash}
-            </Text>
-            <Text fontWeight="400">
-              Len: {props.referendum.info.proposal.lookup.len}
             </Text>
             </Stack>
           <HStack alignItems="center" space={4} justifyContent="space-between">
