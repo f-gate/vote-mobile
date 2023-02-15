@@ -9,6 +9,11 @@ Mobile app for iOS and Android
 ### Requirement
 - Install [yarn](https://yarnpkg.com/)
 - Setup [react native development environment](https://reactnative.dev/docs/environment-setup) use React Native CLI.
+- For ios
+```
+  cd ios
+  pod install 
+```
 
 ### Start development
 - From package folder run `yarn` to make sure we installed all required packages

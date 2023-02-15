@@ -2,7 +2,6 @@ import "@polkadot/api-augment";
 import React,  { useEffect, useState }  from 'react';
 import { NativeBaseProvider } from "native-base";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-
 import { connect, getChain, getReferenda } from './substrate-lib'
 import colors from './config/colors';
 import ReferendaOnGoing from './components/ReferendaOngoing';
@@ -10,6 +9,7 @@ import ReferendaFinished from './components/ReferendaFinished';
 import Header from './components/Header';
 import OnGoingReferendum from './pages/OnGoingReferendum';
 import HistoryReferendum from './pages/HistoryReferendum';
+import Home from "./pages/Home";
 
 export default function App() {
   //const { api } = useSubstrate();
@@ -19,8 +19,9 @@ export default function App() {
   const [referendumFinishedComponent, setReferendumsFinishedComponent] = useState<JSX.Element[]>([]);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'firstTab', title: 'Referendums' },
-    { key: 'secondTab', title: 'History' },
+    { key: 'firstTab', title: 'Home' },
+    { key: 'secondTab', title: 'Vote' },
+    { key: 'thirdTab', title: 'History' },
   ]);
 
 
@@ -52,20 +53,21 @@ export default function App() {
     />
   );
 
-
   return (
     <NativeBaseProvider>
-      <Header chain={chain} />
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={SceneMap({
-          firstTab: () => <OnGoingReferendum referendumComponent={referendumOnGoingComponent} />,
-          secondTab: () => <HistoryReferendum referendumComponent={referendumFinishedComponent} />,
-        })}
-        onIndexChange={setIndex}
-        tabBarPosition={'bottom'}
-        renderTabBar={renderTabBar}
-      />
+        <Header chain={chain} />
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={SceneMap({
+            firstTab: () => <Home chain={chain}/>,
+            secondTab: () => <OnGoingReferendum referendumComponent={referendumOnGoingComponent} />,
+            thirdTab: () => <HistoryReferendum referendumComponent={referendumFinishedComponent} />,
+          })}
+          onIndexChange={setIndex}
+          tabBarPosition={'bottom'}
+          renderTabBar={renderTabBar}
+        />
     </NativeBaseProvider>
+    
   );
 }

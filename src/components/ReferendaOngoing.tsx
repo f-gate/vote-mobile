@@ -3,12 +3,27 @@ import { StyleSheet} from 'react-native';
 import { Text, Box, Stack, Heading, HStack } from "native-base";
 import { ReferendumOnGoing } from '../types/referendum';
 import colors from '../config/colors';
+import { ApiPromise } from '@polkadot/api';
+import { connect } from '../substrate-lib';
 
 interface ReferendaProps {
     referendum: ReferendumOnGoing;
 }
 export default function ReferendaOngoing(props: ReferendaProps) {
-  console.log(JSON.stringify(props.referendum));
+
+  useEffect(() => {
+    const getReferenda = async () => {
+      //TODO: Get referenda description
+      const api = await connect();
+      const referenda = await api.query.democracy.referendumInfoOf(props.referendum.id);
+      //console.log(JSON.stringify(referenda));
+    }
+    getReferenda()
+      // make sure to catch any error
+      .catch(console.error);
+  }, [])
+
+ 
   return (
     <Box alignItems="center">
       <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{

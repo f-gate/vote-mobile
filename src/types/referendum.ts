@@ -3,7 +3,6 @@ export type Referendums= {
     referendumsFinished: ReferendumFinished[];
 };
 
-
 export type ReferendumOnGoing = {
     id: number;
     info: OnGoing;
@@ -12,7 +11,6 @@ export type ReferendumFinished = {
     id: number;
     info: Finished;
 };
-
 
 export type Finished = {
     approved: boolean;
